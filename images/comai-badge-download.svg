@@ -1,0 +1,19 @@
+<svg width="332" height="68" viewBox="0 0 332 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="167 downloads">
+  <title>Downloads: 167</title>
+  <style>
+    .pill { filter: drop-shadow(0 1px 3px rgba(0,0,0,.35)); }
+    .label { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-weight: 700; font-size: 18px; letter-spacing: .09em; text-transform: uppercase; fill: rgba(255,255,255,.78); text-anchor: middle; }
+    .value { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-weight: 700; font-size: 26px; fill: #fff; text-anchor: middle; }
+  </style>
+  <defs>
+    <linearGradient id="gDownload" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22d99a"/>
+      <stop offset="1" stop-color="#0d9d6c"/>
+    </linearGradient>
+  </defs>
+  <g class="pill">
+    <rect x="2" y="2" width="328" height="64" rx="32" fill="url(#gDownload)"/>
+    <text x="166" y="28" class="label">Download</text>
+    <text x="166" y="54" class="value">167</text>
+  </g>
+</svg>
