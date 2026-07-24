@@ -1,5 +1,5 @@
-<svg width="332" height="68" viewBox="0 0 332 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="172 downloads">
-  <title>Downloads: 172</title>
+<svg width="332" height="68" viewBox="0 0 332 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="258 downloads">
+  <title>Downloads: 258</title>
   <style>
     .pill { filter: drop-shadow(0 1px 3px rgba(0,0,0,.35)); }
     .label { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-weight: 700; font-size: 18px; letter-spacing: .09em; text-transform: uppercase; fill: rgba(255,255,255,.78); text-anchor: middle; }
@@ -14,6 +14,6 @@
   <g class="pill">
     <rect x="2" y="2" width="328" height="64" rx="32" fill="url(#gDownload)"/>
     <text x="166" y="28" class="label">Download</text>
-    <text x="166" y="54" class="value">172</text>
+    <text x="166" y="54" class="value">258</text>
   </g>
 </svg>
