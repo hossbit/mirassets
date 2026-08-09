@@ -1,5 +1,5 @@
-<svg width="296" height="68" viewBox="0 0 296 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="1 GitHub stars">
-  <title>GitHub stars: 1</title>
+<svg width="296" height="68" viewBox="0 0 296 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="2 GitHub stars">
+  <title>GitHub stars: 2</title>
   <style>
     .pill { filter: drop-shadow(0 1px 3px rgba(0,0,0,.35)); }
     .label { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-weight: 700; font-size: 18px; letter-spacing: .09em; text-transform: uppercase; fill: rgba(255,255,255,.78); text-anchor: middle; }
@@ -14,6 +14,6 @@
   <g class="pill">
     <rect x="2" y="2" width="292" height="64" rx="32" fill="url(#gStars)"/>
     <text x="148" y="28" class="label">Stars</text>
-    <text x="148" y="54" class="value">1</text>
+    <text x="148" y="54" class="value">2</text>
   </g>
 </svg>
