@@ -1,0 +1,29 @@
+name: Update project badges
+on:
+  schedule:
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/update-project-badges.sh'
+      - '.github/workflows/update-project-badges.yml'
+permissions:
+  contents: write
+concurrency:
+  group: project-badges
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure commit author
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+      - name: Refresh badges
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/update-project-badges.sh
