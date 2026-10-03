@@ -3,6 +3,11 @@ on:
   schedule:
     - cron: '0 18 * * *'
   workflow_dispatch:
+    inputs:
+      verify_only:
+        description: Test clone-statistics access without changing badges
+        type: boolean
+        default: false
   push:
     paths:
       - 'scripts/update-project-badges.sh'
@@ -19,11 +24,24 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Verify clone-statistics access
+        if: ${{ inputs.verify_only == true }}
+        env:
+          GH_TOKEN: ${{ secrets.BADGE_STATS_TOKEN }}
+        run: |
+          test -n "$GH_TOKEN" || { echo "BADGE_STATS_TOKEN is missing"; exit 1; }
+          for repo in hossbit/local-ai-server hossbit/comai-linux-assistant; do
+            count=$(gh api "repos/$repo/traffic/clones" --jq '.count')
+            [[ "$count" =~ ^[0-9]+$ ]] || { echo "Invalid clone count for $repo"; exit 1; }
+            echo "$repo: clone-statistics access verified ($count clones in the last 14 days)"
+          done
       - name: Configure commit author
+        if: ${{ inputs.verify_only != true }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
       - name: Refresh badges
+        if: ${{ inputs.verify_only != true }}
         env:
           GH_TOKEN: ${{ github.token }}
           GH_STATS_TOKEN: ${{ secrets.BADGE_STATS_TOKEN }}
