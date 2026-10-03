@@ -19,7 +19,7 @@ for entry in 'hossbit/local-ai-server|localai' 'hossbit/comai-linux-assistant|co
   release="$(gh api "repos/$repo/releases/latest" --jq '.tag_name')"
   [[ "$release" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Error: unsupported release tag for $repo" >&2; exit 1; }
   stars="$(gh api "repos/$repo" --jq '.stargazers_count')"
-  downloads="$(gh api --paginate --slurp "repos/$repo/releases?per_page=100" | jq '[.[][] | .assets[]? | .download_count] | add // 0')"
+  downloads="$(gh api --paginate "repos/$repo/releases?per_page=100" | jq -s '[.[][] | .assets[]? | .download_count] | add // 0')"
   [[ "$stars" =~ ^[0-9]+$ && "$downloads" =~ ^[0-9]+$ ]] || { echo "Error: invalid counts for $repo" >&2; exit 1; }
   release_file="$MIRASSETS_DIR/images/$prefix-badge-release.svg"
   stars_file="$MIRASSETS_DIR/images/$prefix-badge-stars.svg"
