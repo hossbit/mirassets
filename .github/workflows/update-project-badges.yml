@@ -26,4 +26,5 @@ jobs:
       - name: Refresh badges
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_STATS_TOKEN: ${{ secrets.BADGE_STATS_TOKEN }}
         run: bash scripts/update-project-badges.sh
