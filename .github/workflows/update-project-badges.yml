@@ -1,7 +1,9 @@
 name: Update project badges
 on:
   schedule:
-    - cron: '0 18 * * *'
+    # Check releases and stars hourly, including while the owner's PC is off.
+    # GitHub may delay scheduled runs. Clone totals retain their 14-day guard.
+    - cron: '17 * * * *'
   workflow_dispatch:
     inputs:
       verify_only:
