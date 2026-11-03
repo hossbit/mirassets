@@ -59,7 +59,7 @@ for entry in 'hossbit/local-ai-server|localai' 'hossbit/comai-linux-assistant|co
   fi
   update_value "$download_file" "$downloads"
   if [ "$prefix" = localvllm ]; then
-    sed -i -E "s#aria-label=\"[^\"]*\"#aria-label=\"$downloads recorded repository clones\"#; s#<title>[^<]*</title>#<title>Recorded repository clones: $downloads</title>#; s#class=\"label\">[^<]*<#class=\"label\">Clones<#" "$download_file"
+    sed -i -E "s#aria-label=\"[^\"]*\"#aria-label=\"$downloads recorded repository clones\"#; s#<title>[^<]*</title>#<title>Recorded repository clones: $downloads</title>#; s#class=\"label\">[^<]*<#class=\"label\">Download<#" "$download_file"
   else
     sed -i -E "s#aria-label=\"[^\"]*downloads\"#aria-label=\"$downloads downloads\"#; s#<title>[^<]*</title>#<title>Downloads: $downloads</title>#; s#class=\"label\">[^<]*<#class=\"label\">Download<#" "$download_file"
   fi

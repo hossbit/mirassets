@@ -13,7 +13,7 @@
   </defs>
   <g class="pill">
     <rect x="2" y="2" width="328" height="64" rx="32" fill="url(#gDownload)"/>
-    <text x="166" y="28" class="label">Clones</text>
+    <text x="166" y="28" class="label">Download</text>
     <text x="166" y="54" class="value">0</text>
   </g>
 </svg>
