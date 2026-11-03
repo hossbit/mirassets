@@ -13,10 +13,18 @@ git -C "$MIRASSETS_DIR" pull --ff-only
 update_value() {
   sed -i -E "s#(class=\"value\">)[^<]*(</text>)#\1$2\2#" "$1"
 }
-for entry in 'hossbit/local-ai-server|localai' 'hossbit/comai-linux-assistant|comai'; do
+for entry in 'hossbit/local-ai-server|localai' 'hossbit/comai-linux-assistant|comai' 'hossbit/local-ai-server-vllm|localvllm'; do
   IFS='|' read -r repo prefix <<< "$entry"
   # Fetch and validate everything before changing this project's badges.
-  release="$(gh api "repos/$repo/releases/latest" --jq '.tag_name')"
+  if ! release="$(gh api "repos/$repo/releases/latest" --jq '.tag_name' 2>/dev/null)"; then
+    if [ "$prefix" = localvllm ] &&
+      [ "$(gh api "repos/$repo/releases" --jq 'length' 2>/dev/null || true)" = 0 ]; then
+      echo "$repo: no published release yet; leaving its badges unchanged"
+      continue
+    fi
+    echo "Error: could not fetch the latest release for $repo" >&2
+    exit 1
+  fi
   [[ "$release" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Error: unsupported release tag for $repo" >&2; exit 1; }
   stars="$(gh api "repos/$repo" --jq '.stargazers_count')"
   [[ "$stars" =~ ^[0-9]+$ ]] || { echo "Error: invalid counts for $repo" >&2; exit 1; }
@@ -50,7 +58,11 @@ for entry in 'hossbit/local-ai-server|localai' 'hossbit/comai-linux-assistant|co
     fi
   fi
   update_value "$download_file" "$downloads"
-  sed -i -E "s#aria-label=\"[^\"]*downloads\"#aria-label=\"$downloads downloads\"#; s#<title>[^<]*</title>#<title>Downloads: $downloads</title>#; s#class=\"label\">[^<]*<#class=\"label\">Download<#" "$download_file"
+  if [ "$prefix" = localvllm ]; then
+    sed -i -E "s#aria-label=\"[^\"]*\"#aria-label=\"$downloads recorded repository clones\"#; s#<title>[^<]*</title>#<title>Recorded repository clones: $downloads</title>#; s#class=\"label\">[^<]*<#class=\"label\">Clones<#" "$download_file"
+  else
+    sed -i -E "s#aria-label=\"[^\"]*downloads\"#aria-label=\"$downloads downloads\"#; s#<title>[^<]*</title>#<title>Downloads: $downloads</title>#; s#class=\"label\">[^<]*<#class=\"label\">Download<#" "$download_file"
+  fi
   echo "$repo: $release, $stars stars, $downloads recorded clone downloads"
 
 done
