@@ -13,6 +13,7 @@ on:
   push:
     paths:
       - 'scripts/update-project-badges.sh'
+      - 'scripts/merge-clone-stats.jq'
       - '.github/workflows/update-project-badges.yml'
 permissions:
   contents: write

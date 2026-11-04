@@ -42,6 +42,34 @@ for entry in 'hossbit/local-ai-server|localai' 'hossbit/comai-linux-assistant|co
   [ ! -f "$last_run_file" ] || last_run="$(cat "$last_run_file")"
   [[ "$downloads" =~ ^[0-9]+$ && "$last_run" =~ ^[0-9]+$ ]] || { echo "Error: invalid saved clone counters for $repo" >&2; exit 1; }
   now="$(date +%s)"
+  if [ "$prefix" = localvllm ]; then
+    # Daily upserts refresh partial days without adding the same window twice.
+    ledger="$MIRASSETS_DIR/images/$prefix-clone-history.json"
+    if [ -n "${GH_STATS_TOKEN:-}" ]; then
+      traffic="$(GH_TOKEN="$GH_STATS_TOKEN" gh api "repos/$repo/traffic/clones" 2>/dev/null)" || traffic=""
+    else
+      traffic="$(gh api "repos/$repo/traffic/clones" 2>/dev/null)" || traffic=""
+    fi
+    if [ -n "$traffic" ]; then
+      if [ -f "$ledger" ]; then
+        state="$(cat "$ledger")"
+      else
+        # A nonzero legacy total already includes its last collection day.
+        # Preserve that baseline and count only following days during migration.
+        state="$(jq -cn --argjson baseline "$downloads" --argjson last "$last_run" \
+          '{baseline:$baseline, after:(if $baseline == 0 then "" else ($last|todateiso8601|.[0:10]) end), days:{}}')"
+      fi
+      next_state="$(jq --argjson traffic "$traffic" -f "$SCRIPT_DIR/merge-clone-stats.jq" <<< "$state")" || {
+        echo "Error: invalid clone statistics for $repo" >&2; exit 1;
+      }
+      downloads="$(jq '.baseline + ([.days[]] | add // 0)' <<< "$next_state")"
+      printf '%s\n' "$next_state" > "$ledger"
+      printf '%s\n' "$downloads" > "$total_file"
+      printf '%s\n' "$now" > "$last_run_file"
+    else
+      echo "::warning::$repo: clone statistics unavailable; preserving saved badge count"
+    fi
+  else
   # GitHub exposes a rolling 14-day clone count. Do not add overlapping windows.
   if (( now - last_run >= 14 * 86400 )); then
     if [ -n "${GH_STATS_TOKEN:-}" ]; then
@@ -56,6 +84,7 @@ for entry in 'hossbit/local-ai-server|localai' 'hossbit/comai-linux-assistant|co
     else
       echo "$repo: clone statistics unavailable; keeping the saved total"
     fi
+  fi
   fi
   update_value "$download_file" "$downloads"
   if [ "$prefix" = localvllm ]; then
