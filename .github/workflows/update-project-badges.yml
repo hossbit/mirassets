@@ -2,7 +2,8 @@ name: Update project badges
 on:
   schedule:
     # Check releases and stars hourly, including while the owner's PC is off.
-    # GitHub may delay scheduled runs. Clone totals retain their 14-day guard.
+    # LocalAI/Local vLLM refresh daily buckets; ComAI retains its legacy 14-day guard.
+    # GitHub may delay scheduled runs.
     - cron: '17 * * * *'
   workflow_dispatch:
     inputs:

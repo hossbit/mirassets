@@ -42,7 +42,7 @@ for entry in 'hossbit/local-ai-server|localai' 'hossbit/comai-linux-assistant|co
   [ ! -f "$last_run_file" ] || last_run="$(cat "$last_run_file")"
   [[ "$downloads" =~ ^[0-9]+$ && "$last_run" =~ ^[0-9]+$ ]] || { echo "Error: invalid saved clone counters for $repo" >&2; exit 1; }
   now="$(date +%s)"
-  if [ "$prefix" = localvllm ]; then
+  if [ "$prefix" = localvllm ] || [ "$prefix" = localai ]; then
     # Daily upserts refresh partial days without adding the same window twice.
     ledger="$MIRASSETS_DIR/images/$prefix-clone-history.json"
     if [ -n "${GH_STATS_TOKEN:-}" ]; then
@@ -87,7 +87,7 @@ for entry in 'hossbit/local-ai-server|localai' 'hossbit/comai-linux-assistant|co
   fi
   fi
   update_value "$download_file" "$downloads"
-  if [ "$prefix" = localvllm ]; then
+  if [ "$prefix" = localvllm ] || [ "$prefix" = localai ]; then
     sed -i -E "s#aria-label=\"[^\"]*\"#aria-label=\"$downloads recorded repository clones\"#; s#<title>[^<]*</title>#<title>Recorded repository clones: $downloads</title>#; s#class=\"label\">[^<]*<#class=\"label\">Download<#" "$download_file"
   else
     sed -i -E "s#aria-label=\"[^\"]*downloads\"#aria-label=\"$downloads downloads\"#; s#<title>[^<]*</title>#<title>Downloads: $downloads</title>#; s#class=\"label\">[^<]*<#class=\"label\">Download<#" "$download_file"
